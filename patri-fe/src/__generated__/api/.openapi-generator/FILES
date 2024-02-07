@@ -1,0 +1,14 @@
+.gitignore
+.npmignore
+api.ts
+api/default-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+model/id-response.ts
+model/index.ts
+model/login-body.ts
+model/send-event-args.ts
+model/status-response.ts

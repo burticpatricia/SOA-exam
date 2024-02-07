@@ -1,0 +1,9 @@
+/*
+  Global SCSS artifacts that do not produce actual CSS when transpiled, like
+  (SCSS) variables, mixins, functions and so on.
+  This file will be automatically imported into all components SCSS style
+  blocks.
+*/
+
+
+@import 'util/svg-color';

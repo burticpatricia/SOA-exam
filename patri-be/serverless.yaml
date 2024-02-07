@@ -1,0 +1,49 @@
+service: event
+
+useDotenv: true
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-central-1
+  stage: production
+  timeout: 10
+
+custom:
+  webpack:
+    webpackConfig: 'serverless/webpack.config.js'
+    keepOutputDirectory: true
+    includeModules:
+      forceExclude:
+        - aws-sdk
+        - typescript
+
+functions:
+  event-consumer:
+    handler: serverless/event-consumer.eventsHandler
+    environment:
+      APP_EVENT_SQS_QUEUE:
+        Fn::GetAtt:
+          - EventQueue
+          - QueueUrl
+      APP_AWS_KEY: ${env:APP_AWS_KEY}
+      APP_AWS_SECRET: ${env:APP_AWS_SECRET}
+      APP_AWS_REGION: ${env:APP_AWS_REGION}
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - EventQueue
+              - Arn
+
+resources:
+  Resources:
+    EventQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "EVENT_SQS_QUEUE"
